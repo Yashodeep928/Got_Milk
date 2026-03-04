@@ -1,0 +1,154 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #dbeafe, #f0f9ff);
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+}
+
+.milk-box {
+  width: 500px;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Buttons */
+
+.btn-group {
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  border: none;
+  padding: 12px 25px;
+  border-radius: 25px;
+  color: black;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn.one {
+  background: #0af861; /* soft green */
+}
+
+.btn.second {
+  background: #e03d3d; /* soft red */
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Table */
+
+.custom-table {
+  width: 50%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.custom-table th {
+  background: #60a5fa; /* soft blue */
+  color: white;
+  padding: 12px;
+  font-weight: 500;
+}
+
+.custom-table td {
+  padding: 12px;
+  text-align: center;
+  background: #ffffff;
+}
+
+.custom-table tr:nth-child(even) td {
+  background: #f1f5f9;
+}
+
+.custom-table tr:hover td {
+  background: #e0f2fe;
+  transition: background 0.3s ease;
+}
+
+
+.items{
+  display: flex;
+  list-style: none;
+  gap: 50px;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-of-items{
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.task-btn{
+  padding: 15px;
+  background-color: rgb(107, 227, 107);
+  color: black;
+  cursor: pointer;
+}
+
+.overlay{
+  position: fixed;
+  visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  inset:0;
+  transition: transform 0.3s ease-out;
+}
+
+.overlay.show{
+  visibility: visible;
+}
+
+.modal {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
+  transform: scale(0.8);
+  transition: transform 0.3s ease;
+}
+
+ .overlay.show .modal {
+  transform: scale(1);
+}
