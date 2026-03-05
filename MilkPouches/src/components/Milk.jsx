@@ -1,131 +1,160 @@
 import './Milk.css'
 import { useState } from 'react'
+
 function Milk() {
-    const[yes,setYes] = useState(false)
-    const[no,setNo] = useState(false)
-    const [selected, setSelected] = useState(null);
-    const[showModal,setShowModal] = useState(false)
-    const d = new Date()
-    const formated = d.toLocaleString("en-IN",
-    {
+
+  const d = new Date()
+  const formated = d.toLocaleString("en-IN", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric"
-    }
+  })
+
+  const [tasks, setTasks] = useState([])
+  const [showModal, setShowModal] = useState(false)
+
+  const [formData, setFormData] = useState({
+    title: '',
+    frequency: 'Everyday'
+  })
+
+  const openTaskModal = () => {
+    setShowModal(prev => !prev)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    if (!formData.title.trim()) return
+
+    setTasks(prev => [
+      ...prev,
+      {
+        ...formData,
+        status: null   
+      }
+    ])
+
+    setFormData({
+      title: '',
+      frequency: 'Everyday'
+    })
+
+    setShowModal(false)
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const madeYes = (index) => {
+    setTasks(prev => prev.map((task,i)=> i===index ? {...task,status:'yes'} :task ))
+  }
+
+  const madeNo = (index) => {
+    setTasks(prev =>
+      prev.map((task, i) =>
+        i === index
+          ? { ...task, status: 'no' }
+          : task
+      )
     )
+  }
 
-    const madeYes = ()=>{
-        setYes(prev => !prev)
-        setSelected('yes')
-    }
-
-    const madeNo = ()=>{
-         setNo(prev => !prev)
-         setSelected('no')
-    }
-
-    const openTaskModal = () =>{
-      setShowModal(prev => !prev)
-    }
   return (
-       <>
-       <div className="container">
-           <div className="date">
-            {formated}
-          </div>
-          <button onClick={openTaskModal} className='task-btn'>Add task</button>
-        <div className="milk-box">
-      
-         {/* <header className='header'>
-        <h2>Have You Got your Milk Bag today?</h2>
-         </header> */}
+    <div className="container">
 
+      <div className="date">
+        {formated}
+      </div>
 
-         <ul className='list-of-items'>
-          <li className='items'> 
+      <button onClick={openTaskModal} className='task-btn'>
+        Add task
+      </button>
 
-          <div className="item">
-            <p>Got Milk ?</p>
-          </div>
+      <div className="milk-box">
 
-      <div className="btn-group">
-         <button disabled={selected === 'no'} onClick={madeYes}className='btn one'>Yes</button>
-         <button disabled={selected === 'yes'} onClick={madeNo} className='btn second'>No</button>
-     </div>
-               
-         </li>
+        {tasks.length === 0 && (
+          <p>No tasks yet</p>
+        )}
 
+        <ul className='list-of-items'>
+          {tasks.map((task, index) => (
+            <li key={index} className='items'>
 
-         <li className='items'> 
+              <div className="item">
+                <p>{task.title}</p>
+                <small>{task.frequency}</small>
+              </div>
 
-          <div className="item">
-            <p>Got Milk ?</p>
-          </div>
+              <div className="btn-group">
+                <button
+                  disabled={task.status === 'no'}
+                  onClick={() => madeYes(index)}
+                  className='btn one'
+                >
+                  Yes
+                </button>
 
-      <div className="btn-group">
-         <button disabled={selected === 'no'} onClick={madeYes}className='btn one'>Yes</button>
-         <button disabled={selected === 'yes'} onClick={madeNo} className='btn second'>No</button>
-     </div>
-               
-         </li>
-         </ul>
-        
-        
-       </div>
+                <button
+                  disabled={task.status === 'yes'}
+                  onClick={() => madeNo(index)}
+                  className='btn second'
+                >
+                  No
+                </button>
+              </div>
 
-        
-       
-  <div onClick={()=>setShowModal(prev => !prev)} className={`overlay ${showModal ? "show":""}`}>
-    <form className="modal">
-      <label htmlFor="task">Task</label>
-      <input
-        type="text"
-        name="task"
-        id="task"
-        placeholder="write your task here"
-      />
+            </li>
+          ))}
+        </ul>
+      </div>
 
-      <label htmlFor="frequency">Frequency</label>
-      <select name="frequency" id="frequency">
-        <option>Everyday</option>
-        <option>Monthly</option>
-      </select>
-    </form>
-  </div>
+      {/* Modal */}
+      <div
+        onClick={() => setShowModal(false)}
+        className={`overlay ${showModal ? "show" : ""}`}
+      >
 
+        <form
+          onSubmit={handleSubmit}
+          className="modal"
+          onClick={(e) => e.stopPropagation()}
+        >
 
+          <label htmlFor="title">Title</label>
+          <input
+            type="text"
+            name="title"
+            id="title"
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="write your task here"
+          />
 
+          <label htmlFor="frequency">Frequency</label>
+          <select
+            value={formData.frequency}
+            name="frequency"
+            id="frequency"
+            onChange={handleChange}
+          >
+            <option value="Everyday">Everyday</option>
+            <option value="Monthly">Monthly</option>
+          </select>
 
- <table className="custom-table">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Bought?</th>
-    </tr>
-  </thead>
+          <button type="submit">Submit</button>
 
-  <tbody>
-    {yes && (
-      <tr>
-        <td>{formated}</td>
-        <td>Yes</td>
-      </tr>
-    )}
+        </form>
+      </div>
 
-    {no && (
-      <tr>
-        <td>{formated}</td>
-        <td>No</td>
-      </tr>
-    )}
-  </tbody>
-</table>
-
-</div>
-       
-       
-</>
+    </div>
   )
 }
 
