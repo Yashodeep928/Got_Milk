@@ -116,7 +116,7 @@ function Milk() {
         </ul>
       </div>
 
-      {/* Modal */}
+   
       <div
         onClick={() => setShowModal(false)}
         className={`overlay ${showModal ? "show" : ""}`}
@@ -159,3 +159,9 @@ function Milk() {
 }
 
 export default Milk
+
+// asus lenovo dell
+// ryzen7 or 5 processor intel i5 
+
+// 4gb graphichs card
+// ram 16 gb or 32 gb
