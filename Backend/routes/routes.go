@@ -2,11 +2,11 @@ package routes
 
 import (
 	"net/http"
-	//  "github.com/Yashodeep/Got_Milk/backend/handlers"
+	"backend/handlers"
 )
 
 func RegisterRoutes() {
 
-	http.HandleFunc("/task/post", taskHandler.CreateTaskHandler)
+	http.HandleFunc("/task/post", handlers.CreateTaskHandler)
 
 }
