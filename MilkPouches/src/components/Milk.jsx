@@ -10,7 +10,7 @@ function Milk() {
     month: "long",
     day: "numeric"
   })
-
+  const [showCalendar,setShowCalendar] = useState(false)
   const [tasks, setTasks] = useState([])
   const [showModal, setShowModal] = useState(false)
 
@@ -45,13 +45,21 @@ function Milk() {
   }
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+  const { name, value } = e.target
 
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
+  setFormData(prev => ({
+    ...prev,
+    [name]: value
+  }))
+
+  if (name === "frequency") {
+    if (value === "Monthly") {
+      setShowCalendar(true)
+    } else {
+      setShowCalendar(false)
+    }
   }
+}
 
   const madeYes = (index) => {
     setTasks(prev => prev.map((task,i)=> i===index ? {...task,status:'yes'} :task ))
@@ -66,6 +74,7 @@ function Milk() {
       )
     )
   }
+
 
   return (
     <div className="container">
@@ -149,9 +158,17 @@ function Milk() {
             <option value="Monthly">Monthly</option>
           </select>
 
+           {showCalendar && (
+          <input className='calendar' type='date'/>
+        )}
+
           <button type="submit">Submit</button>
 
+         
+
         </form>
+
+        
       </div>
 
     </div>
