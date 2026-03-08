@@ -2,11 +2,16 @@ package routes
 
 import (
 	"net/http"
+
 	"backend/handlers"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func RegisterRoutes() {
+func RegisterRoutes(db *pgxpool.Pool) *http.ServeMux {
 
-	http.HandleFunc("/task/post", handlers.CreateTaskHandler)
+	router := http.NewServeMux()
 
+	router.HandleFunc("/tasks/post", handlers.CreateTaskHandler(db))
+
+	return router
 }

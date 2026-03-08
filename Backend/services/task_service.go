@@ -1,14 +1,21 @@
 package services
-import(
+
+import (
+	"errors"
+
 	"backend/models"
+	"backend/repository"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func CreateTask(task models.Task) {
+func CreateTask(db *pgxpool.Pool, task models.Task) error {
+	if task.Frequency == "Monthly" && task.DayOfMonth == 0 {
+		return errors.New("day_of_month is required for monthly tasks")
+	}
 
-    if task.Frequency == "monthly" && task.DayOfMonth == 0 {
-        return error
-    }
+	if err := repository.CreateTask(db, task); err != nil {
+		return err
+	}
 
-    repository.CreateTask(task)
-
+	return nil
 }

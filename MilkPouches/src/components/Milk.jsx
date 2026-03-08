@@ -1,3 +1,4 @@
+
 import './Milk.css'
 import { useState } from 'react'
 
@@ -10,71 +11,81 @@ function Milk() {
     month: "long",
     day: "numeric"
   })
-  const [showCalendar,setShowCalendar] = useState(false)
+
   const [tasks, setTasks] = useState([])
   const [showModal, setShowModal] = useState(false)
 
   const [formData, setFormData] = useState({
     title: '',
-    frequency: 'Everyday'
+    frequency: 'Everyday',
+    day_of_month: 0
   })
 
   const openTaskModal = () => {
     setShowModal(prev => !prev)
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+  e.preventDefault()
 
-    if (!formData.title.trim()) return
+  if (!formData.title.trim()) return
 
-    setTasks(prev => [
-      ...prev,
-      {
-        ...formData,
-        status: null   
-      }
-    ])
+  const taskData = {
+    ...formData,
+    status: null
+  }
 
-    setFormData({
-      title: '',
-      frequency: 'Everyday'
+  setTasks(prev => [...prev, taskData])
+
+  try {
+    const response = await fetch("http://localhost:8080/tasks/post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(taskData)
     })
 
-    setShowModal(false)
+    const data = await response.json()
+    console.log(data)
+
+  } catch (error) {
+    console.error("Error:", error)
   }
 
-  const handleChange = (e) => {
-  const { name, value } = e.target
+  setFormData({
+    title: '',
+    frequency: 'Everyday',
+    day_of_month: 0
+  })
 
-  setFormData(prev => ({
-    ...prev,
-    [name]: value
-  }))
-
-  if (name === "frequency") {
-    if (value === "Monthly") {
-      setShowCalendar(true)
-    } else {
-      setShowCalendar(false)
-    }
-  }
+  setShowModal(false)
 }
 
+  const handleChange = (e) => {
+    const { name, value } = e.target
+
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
   const madeYes = (index) => {
-    setTasks(prev => prev.map((task,i)=> i===index ? {...task,status:'yes'} :task ))
+    setTasks(prev =>
+      prev.map((task, i) =>
+        i === index ? { ...task, status: 'yes' } : task
+      )
+    )
   }
 
   const madeNo = (index) => {
     setTasks(prev =>
       prev.map((task, i) =>
-        i === index
-          ? { ...task, status: 'no' }
-          : task
+        i === index ? { ...task, status: 'no' } : task
       )
     )
   }
-
 
   return (
     <div className="container">
@@ -125,7 +136,6 @@ function Milk() {
         </ul>
       </div>
 
-   
       <div
         onClick={() => setShowModal(false)}
         className={`overlay ${showModal ? "show" : ""}`}
@@ -158,17 +168,26 @@ function Milk() {
             <option value="Monthly">Monthly</option>
           </select>
 
-           {showCalendar && (
-          <input className='calendar' type='date'/>
-        )}
+          {formData.frequency === "Monthly" && (
+            <div className="day-of-month ">
+              <label htmlFor="day_of_month">Select date</label>
+
+              <input
+                type="number"
+                name="day_of_month"
+                id="day_of_month"
+                min="1"
+                max="31"
+                value={formData.day_of_month}
+                onChange={handleChange}
+              />
+            </div>
+          )}
 
           <button type="submit">Submit</button>
 
-         
-
         </form>
 
-        
       </div>
 
     </div>
@@ -177,8 +196,3 @@ function Milk() {
 
 export default Milk
 
-// asus lenovo dell
-// ryzen7 or 5 processor intel i5 
-
-// 4gb graphichs card
-// ram 16 gb or 32 gb
