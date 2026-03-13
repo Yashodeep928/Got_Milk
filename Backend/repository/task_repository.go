@@ -30,15 +30,15 @@ func CreateTask(db *pgxpool.Pool, task models.Task) error {
 }
 
 
-func GetAllTasks (db *pgxpool.Pool, task models.Task) {
+func GetAllTasks(db *pgxpool.Pool, task models.Task) ([]models.Task, error) {
 
 	query := `SELECT * FROM tasks WHERE title=$1 AND frequency=$2`
       
 	rows, err := db.Query(
 	context.Background(),
 	query,
-	title,
-	frequency,
+	task.Title,
+    task.Frequency,
 )
 
 if err != nil {
@@ -53,10 +53,10 @@ for rows.Next(){
 	var task models.Task
 
 	err := rows.Scan(
-		$task.ID,
-		&task.Title,
-		&task.Frequency,
-		&task.DayOfMonth,
+		task.ID,
+		task.Title,
+		task.Frequency,
+		task.DayOfMonth,
 	)
 	if err != nil {
 			return nil, err
@@ -65,6 +65,6 @@ for rows.Next(){
 		tasks = append(tasks, task)
 	}
 
-	return tasks, nil
+	return tasks,nil
 
 }

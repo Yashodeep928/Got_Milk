@@ -153,12 +153,9 @@ body {
   transform: scale(1);
 }
 
-.day-of-month{
-  opacity: 0;
-  transition: opacity 0.3s ease;
+.day-of-month {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
 }
-.day-of-month .active{
-  opacity: 1;
-
-}
-

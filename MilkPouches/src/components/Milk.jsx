@@ -88,7 +88,7 @@ function Milk() {
       )
     )
   }
-
+console.log(formData.frequency)
   return (
     <div className="container">
 
