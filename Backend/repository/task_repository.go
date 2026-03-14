@@ -93,7 +93,7 @@ func GetTodayTasks(db *pgxpool.Pool) ([]models.Task, error) {
 
 	defer rows.Close()
 
-	tasks := []models.Task{} // ✅ important fix
+	tasks := []models.Task{} 
 
 	for rows.Next() {
 		var task models.Task
