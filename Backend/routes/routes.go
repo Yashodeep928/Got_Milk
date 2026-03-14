@@ -8,10 +8,10 @@ import (
 )
 
 func RegisterRoutes(db *pgxpool.Pool) *http.ServeMux {
-
 	router := http.NewServeMux()
 
 	router.HandleFunc("/tasks/post", handlers.CreateTaskHandler(db))
+	router.HandleFunc("/tasks/today", handlers.GetTodayTasksHandler(db))
 
 	return router
 }

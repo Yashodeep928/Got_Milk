@@ -9,7 +9,7 @@ import (
 )
 
 func CreateTask(db *pgxpool.Pool, task models.Task) error {
-	if task.Frequency == "Monthly" && task.DayOfMonth == 0 {
+	if task.Frequency == "Monthly" && (task.DayOfMonth == nil || *task.DayOfMonth == 0) {
 		return errors.New("day_of_month is required for monthly tasks")
 	}
 
@@ -18,4 +18,13 @@ func CreateTask(db *pgxpool.Pool, task models.Task) error {
 	}
 
 	return nil
+}
+
+func GetTodayTasks(db *pgxpool.Pool) ([]models.Task, error) {
+	tasks, err := repository.GetTodayTasks(db)
+	if err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
 }

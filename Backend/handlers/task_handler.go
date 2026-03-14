@@ -34,3 +34,23 @@ func CreateTaskHandler(db *pgxpool.Pool) http.HandlerFunc {
 		})
 	}
 }
+
+func GetTodayTasksHandler(db *pgxpool.Pool) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		tasks, err := services.GetTodayTasks(db)
+		if err != nil {
+			http.Error(w, "Failed to fetch today's tasks", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		_ = json.NewEncoder(w).Encode(tasks)
+	}
+}
